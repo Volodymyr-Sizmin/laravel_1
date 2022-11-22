@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Services\UserService;
-use Exception;
 use Tests\TestCase;
 
 class UserServiceTest extends TestCase
