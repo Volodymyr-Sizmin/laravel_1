@@ -24,6 +24,5 @@ class RegistrationTest extends TestCase
         $response = $this->postJson('/api/users', $data);
         $response->assertStatus(201);
         $response->assertJsonStructure( ['token']);
-
     }
 }
