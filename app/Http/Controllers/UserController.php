@@ -30,10 +30,9 @@ class UserController extends Controller
         $data = $request->validated();
         $user = User::where('email', $data['email'])->first();
 
-        if(!password_verify($data['password'], $user->password)) {
-            return response (null, 403);
+        if(!auth()->attempt($request->validated())) {
+            return response (null, 401);
         }
-        return response( $user->createToken('asd'), 200);
+        return response( $user->createToken('AccessToken'), 200);
     }
-
 }

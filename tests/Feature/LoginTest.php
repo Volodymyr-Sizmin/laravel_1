@@ -18,16 +18,13 @@ class LoginTest extends TestCase
     public function test_login()
     {
         $this->artisan('passport:install');
-        $user = User::factory()->create([
+        $data= [
             'email' => 'test@admin.com',
             'password' => 'test1234'
-        ]);
+        ];
+        User::create($data);
 
-        $response = $this->postJson('/api/login', [
-            'email' => 'test@admin.com',
-            'password' => 'test1234',
-        ]);
-
+        $response = $this->postJson('/api/login', $data);
         $response->assertStatus(200);
         $response->assertJsonStructure( ['token']);
     }
