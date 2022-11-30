@@ -23,6 +23,6 @@ Route::post('/users', [UserController::class, 'store']);
 
 Route::post('/login', [UserController::class, 'login']);
 
-Route::post('/reset', [UserController::class, 'reset_password']);
+Route::post('/reset', [UserController::class, 'resetPassword']);
 
-Route::post('/recovery', [UserController::class, 'recovery_password']);
+Route::post('/recovery', [UserController::class, 'recoveryPassword']);

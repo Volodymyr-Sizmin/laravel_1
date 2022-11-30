@@ -12,6 +12,7 @@ use App\Services\RecoveryPasswordService;
 use App\Services\ResetPasswordService;
 use App\Services\UserService;
 use Carbon\Carbon;
+use Exception;
 
 class UserController extends Controller
 {
@@ -20,13 +21,9 @@ class UserController extends Controller
     protected RecoveryPasswordService $recoveryPasswordService;
 
 
-    public function __construct(UserService $userService,
-                                ResetPasswordService $resetPasswordService,
-                                RecoveryPasswordService $recoveryPasswordService)
+    public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-        $this->resetPasswordService =  $resetPasswordService;
-        $this->recoveryPasswordService = $recoveryPasswordService;
     }
 
     public function store(RegisterRequest $request)
@@ -43,22 +40,28 @@ class UserController extends Controller
         $user = User::where('email', $data['email'])->first();
 
         if(!auth()->attempt($request->validated())) {
-            return response (null, 401);
+            return response()->json(null, 401);
         }
-        return response( $user->createToken('AccessToken'), 200);
+        return response()->json( $user->createToken('AccessToken'), 200);
     }
 
-    public function reset_password(ResetPasswordRequest $request)
+    public function resetPassword(ResetPasswordRequest $request)
     {
-        $this->resetPasswordService->storeResetToken($request->validated());
+        $this->userService->storeResetToken($request->validated());
 
-        return response('Token sent to Email');
+        return response()->json('Token sent to Email',200);
     }
 
-    public function recovery_password(RecoveryPasswordRequest $request)
+    public function recoveryPassword(RecoveryPasswordRequest $request)
     {
-        $this->recoveryPasswordService->updatePassword($request->validated());
-        return response('Password updated');
+        try{
+            $this->userService->updatePassword($request->validated());
+        } catch (Exception $e){
+            return response()->json($e->getMessage(), 422);
+        }
+
+
+        return response()->json("password updated",200);
     }
 
 }
