@@ -8,18 +8,12 @@ use App\Http\Requests\RegisterRequest;
 
 use App\Http\Requests\ResetPasswordRequest;
 use App\Models\User;
-use App\Services\RecoveryPasswordService;
-use App\Services\ResetPasswordService;
 use App\Services\UserService;
-use Carbon\Carbon;
 use Exception;
 
 class UserController extends Controller
 {
     protected UserService $userService;
-    protected ResetPasswordService $resetPasswordService;
-    protected RecoveryPasswordService $recoveryPasswordService;
-
 
     public function __construct(UserService $userService)
     {

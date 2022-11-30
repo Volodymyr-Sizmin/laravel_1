@@ -23,7 +23,7 @@ class RecoveryPasswordTest extends TestCase
             'user_id' => $user->id,
             'token' => Str::random(50)
         ];
-        ResetPassword::create($resetData);
+        $resetPasswordObject = ResetPassword::create($resetData);
         $recovery = [
             'token' => $resetData['token'],
             'password' => 'TestTest',
@@ -31,5 +31,7 @@ class RecoveryPasswordTest extends TestCase
         ];
         $response = $this->postJson('/api/recovery', $recovery);
         $response->assertStatus(200);
+        $resetPasswordObject->delete();
+        $this->assertDatabaseMissing('reset_password', ['token' => $resetData['token']]);
     }
 }

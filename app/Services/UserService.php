@@ -35,10 +35,8 @@ class UserService
         if (Carbon::now()->diffInHours($recovery->created_at)>2) {
             throw new \Exception("Token is expired");
         }
-            $user= User::find($recovery->user_id);
-            $user->update([
-                'password'=> $data['password']
-            ]);
-            $recovery->delete();
+        $user= User::find($recovery->user_id);
+        $user->update(['password'=> $data['password']]);
+        $recovery->delete();
     }
 }

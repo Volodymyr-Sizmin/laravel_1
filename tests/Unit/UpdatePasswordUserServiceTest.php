@@ -34,5 +34,5 @@ class UpdatePasswordUserServiceTest extends TestCase
         $userService->updatePassword($data);
 
         $this->assertInstanceOf(UserService::class, $userService);
-        }
     }
+}
