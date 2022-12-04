@@ -39,4 +39,9 @@ class UserService
         $user->update(['password'=> $data['password']]);
         $recovery->delete();
     }
+
+    public function updateUser($user, $data)
+    {
+        return $user->update($data);
+    }
 }
