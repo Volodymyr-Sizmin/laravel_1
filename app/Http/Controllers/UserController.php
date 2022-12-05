@@ -7,6 +7,7 @@ use App\Http\Requests\RecoveryPasswordRequest;
 use App\Http\Requests\RegisterRequest;
 
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Services\UserService;
 use Exception;
@@ -53,9 +54,12 @@ class UserController extends Controller
         } catch (Exception $e){
             return response()->json($e->getMessage(), 422);
         }
-
-
         return response()->json("password updated",200);
     }
 
+    public function updateUser(UpdateUserRequest $request, User $user)
+    {
+       $this->userService->updateUser($user, $request->validated());
+       return response()->json('updated', 200);
+    }
 }

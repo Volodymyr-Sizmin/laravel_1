@@ -26,8 +26,5 @@ class UserServiceTest extends TestCase
         $this->assertDatabaseHas('users', [
             'email'=>'test20@test.com'
         ]);
-
-        $this->assertInstanceOf(UserService::class, $create);
-
     }
 }
