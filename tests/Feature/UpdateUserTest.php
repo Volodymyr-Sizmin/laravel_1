@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Laravel\Passport\Passport;
 
 class UpdateUserTest extends TestCase
 {
@@ -24,8 +25,10 @@ class UpdateUserTest extends TestCase
             'password' => 'test1234',
             'password_confirmation' => 'test1234'
         ];
+        Passport::actingAs($user);
 
-        $response = $this->putJson('/api/auth/users/{user}', $data );
+        $response = $this->putJson('/api/auth/users/1', $data );
+        $this->assertDatabaseHas('users', ['email'=>$data['email']]);
         $response->assertStatus(200);
     }
 }

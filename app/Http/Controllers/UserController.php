@@ -9,14 +9,11 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use App\Policies\UserPolicy;
 use App\Services\UserService;
 use Exception;
-use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
-    public $id;
     protected UserService $userService;
 
     public function __construct(UserService $userService)

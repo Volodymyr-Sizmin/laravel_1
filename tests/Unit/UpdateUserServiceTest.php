@@ -30,5 +30,6 @@ class UpdateUserServiceTest extends TestCase
         $userService->updateUser($user, $data );
 
         $this->assertInstanceOf(UserService::class, $userService);
+        $this->assertDatabaseHas('users', ['email'=>$data['email']]);
     }
 }
