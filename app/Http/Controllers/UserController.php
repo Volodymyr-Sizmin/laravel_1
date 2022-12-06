@@ -7,13 +7,18 @@ use App\Http\Requests\RecoveryPasswordRequest;
 use App\Http\Requests\RegisterRequest;
 
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\ShowUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Policies\UserPolicy;
 use App\Services\UserService;
 use Exception;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
+    public $id;
     protected UserService $userService;
 
     public function __construct(UserService $userService)
@@ -61,5 +66,16 @@ class UserController extends Controller
     {
        $this->userService->updateUser($user, $request->validated());
        return response()->json('updated', 200);
+    }
+
+    public function index()
+    {
+        $allUsersEmail = User::all()->pluck('email');
+        return new UserResource($allUsersEmail);
+    }
+
+    public function show(ShowUserRequest $request,User $user)
+    {
+        return new UserResource($user);
     }
 }

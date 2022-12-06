@@ -30,5 +30,6 @@ Route::post('/recovery', [UserController::class, 'recoveryPassword']);
 Route::name('auth')->prefix('auth')->middleware('auth:api')->group(function ()
 {
     Route::put('/users/{user}',[UserController::class, 'updateUser'])->whereNumber('user');
-
+    Route::get('/users/',[UserController::class, 'index']);
+    Route::get('/users/{user}',[UserController::class, 'show'])->whereNumber('user');
 });

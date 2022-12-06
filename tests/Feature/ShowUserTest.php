@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
-class UpdateUserTest extends TestCase
+class ShowUserTest extends TestCase
 {
     use RefreshDatabase;
     /**
@@ -16,19 +16,21 @@ class UpdateUserTest extends TestCase
      *
      * @return void
      */
-    public function testUpdateUser()
+    public function testShowUser()
     {
         $this->artisan('passport:install');
         $user = User::factory()->create();
-        $data =  [
-            'email' => 'test10@test.com',
-            'password' => 'test1234',
-            'password_confirmation' => 'test1234'
-        ];
-
         Passport::actingAs($user);
-        $response = $this->putJson('/api/auth/users/1', $data );
-        $this->assertDatabaseHas('users', ['email'=>$data['email']]);
+
+        $response = $this->getJson('/api/auth/users/1');
+        $response->assertJsonStructure([
+            'users' => [
+                'id',
+                'email',
+                'created_at',
+                'updated_at',
+            ],
+        ]);
         $response->assertStatus(200);
     }
 }
