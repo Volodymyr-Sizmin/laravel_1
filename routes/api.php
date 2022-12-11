@@ -32,4 +32,5 @@ Route::name('auth')->prefix('auth')->middleware('auth:api')->group(function ()
     Route::put('/users/{user}',[UserController::class, 'updateUser'])->whereNumber('user');
     Route::get('/users/',[UserController::class, 'index']);
     Route::get('/users/{user}',[UserController::class, 'show'])->whereNumber('user');
+    Route::delete('/users/{user}',[UserController::class, 'delete'])->whereNumber('user');
 });

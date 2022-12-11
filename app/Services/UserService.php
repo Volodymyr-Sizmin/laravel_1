@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Mail\DeletedUserMail;
 use App\Mail\PasswordResetMail;
 use App\Models\ResetPassword;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -43,5 +45,12 @@ class UserService
     public function updateUser($user, $data)
     {
         return $user->update($data);
+    }
+
+    public function deleteUser($user)
+    {
+        $user->update(['status' => User::INACTIVE]);
+        $pdf = PDF::loadView('emails.pdf_for_deleted_user')->output();
+        Mail::to($user['email'])->send(new DeletedUserMail($pdf));
     }
 }

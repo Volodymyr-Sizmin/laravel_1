@@ -11,14 +11,11 @@ use App\Http\Requests\ShowUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Policies\UserPolicy;
 use App\Services\UserService;
 use Exception;
-use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
-    public $id;
     protected UserService $userService;
 
     public function __construct(UserService $userService)
@@ -28,7 +25,7 @@ class UserController extends Controller
 
     public function store(RegisterRequest $request)
     {
-       $user= $this->userService->createUser($request->validated());
+        $user = $this->userService->createUser($request->validated());
 
         $token = $user->createToken('LaravalPassportToken')->accessToken;
         return response()->json(['token' => $token], 201);
@@ -39,33 +36,33 @@ class UserController extends Controller
         $data = $request->validated();
         $user = User::where('email', $data['email'])->first();
 
-        if(!auth()->attempt($request->validated())) {
+        if (!auth()->attempt($request->validated())) {
             return response()->json(null, 401);
         }
-        return response()->json( $user->createToken('AccessToken'), 200);
+        return response()->json($user->createToken('AccessToken'), 200);
     }
 
     public function resetPassword(ResetPasswordRequest $request)
     {
         $this->userService->storeResetToken($request->validated());
 
-        return response()->json('Token sent to Email',200);
+        return response()->json('Token sent to Email', 200);
     }
 
     public function recoveryPassword(RecoveryPasswordRequest $request)
     {
-        try{
+        try {
             $this->userService->updatePassword($request->validated());
-        } catch (Exception $e){
+        } catch (Exception $e) {
             return response()->json($e->getMessage(), 422);
         }
-        return response()->json("password updated",200);
+        return response()->json("password updated", 200);
     }
 
     public function updateUser(UpdateUserRequest $request, User $user)
     {
-       $this->userService->updateUser($user, $request->validated());
-       return response()->json('updated', 200);
+        $this->userService->updateUser($user, $request->validated());
+        return response()->json('updated', 200);
     }
 
     public function index()
@@ -74,8 +71,14 @@ class UserController extends Controller
         return new UserResource($allUsersEmail);
     }
 
-    public function show(ShowUserRequest $request,User $user)
+    public function show(ShowUserRequest $request, User $user)
     {
         return new UserResource($user);
+    }
+
+    public function delete(ShowUserRequest $request, User $user)
+    {
+        $this->userService->deleteUser($user);
+        return response('user deleted',200);
     }
 }

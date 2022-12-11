@@ -27,7 +27,7 @@ class UpdateUserTest extends TestCase
         ];
 
         Passport::actingAs($user);
-        $response = $this->putJson('/api/auth/users/1', $data );
+        $response = $this->putJson("/api/auth/users/$user->id", $data );
         $this->assertDatabaseHas('users', ['email'=>$data['email']]);
         $response->assertStatus(200);
     }
