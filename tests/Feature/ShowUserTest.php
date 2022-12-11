@@ -22,7 +22,7 @@ class ShowUserTest extends TestCase
         $user = User::factory()->create();
         Passport::actingAs($user);
 
-        $response = $this->getJson("/api/auth/users/$user->id");
+        $response = $this->getJson("/api/users/$user->id");
         $response->assertJsonStructure([
             'users' => [
                 'id',

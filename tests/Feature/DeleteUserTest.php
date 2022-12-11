@@ -25,7 +25,7 @@ class DeleteUserTest extends TestCase
         $user = User::factory()->create();
         Passport::actingAs($user);
 
-        $response = $this->deleteJson("/api/auth/users/$user->id");
+        $response = $this->deleteJson("/api/users/$user->id");
         Mail::assertSent(DeletedUserMail::class);
         $response->assertStatus(200);
     }

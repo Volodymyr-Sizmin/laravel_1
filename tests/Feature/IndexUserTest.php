@@ -22,7 +22,7 @@ class IndexUserTest extends TestCase
         $user = User::factory()->create();
         Passport::actingAs($user);
 
-        $response = $this->getJson('/api/auth/users/');
+        $response = $this->getJson('/api/users/');
         $response->assertStatus(200);
     }
 }

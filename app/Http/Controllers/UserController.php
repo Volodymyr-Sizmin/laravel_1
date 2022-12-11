@@ -36,7 +36,7 @@ class UserController extends Controller
         $data = $request->validated();
         $user = User::where('email', $data['email'])->first();
 
-        if (!auth()->attempt($request->validated())) {
+        if(!auth()->attempt($request->validated())) {
             return response()->json(null, 401);
         }
         return response()->json($user->createToken('AccessToken'), 200);
@@ -79,6 +79,6 @@ class UserController extends Controller
     public function delete(ShowUserRequest $request, User $user)
     {
         $this->userService->deleteUser($user);
-        return response('user deleted',200);
+        return response()->json('user deleted',200);
     }
 }
