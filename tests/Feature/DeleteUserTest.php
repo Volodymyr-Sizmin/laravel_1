@@ -2,13 +2,16 @@
 
 namespace Tests\Feature;
 
+use App\Mail\DeletedUserMail;
 use App\Models\User;
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Passport\Passport;
+use Mockery;
 use Tests\TestCase;
 
-class IndexUserTest extends TestCase
+class DeleteUserTest extends TestCase
 {
     use RefreshDatabase;
     /**
@@ -16,13 +19,14 @@ class IndexUserTest extends TestCase
      *
      * @return void
      */
-    public function testIndexUser()
+    public function testDeleteuser()
     {
-        $this->artisan('passport:install');
+        Mail::fake();
         $user = User::factory()->create();
         Passport::actingAs($user);
 
-        $response = $this->getJson('/api/users/');
+        $response = $this->deleteJson("/api/users/$user->id");
+        Mail::assertSent(DeletedUserMail::class);
         $response->assertStatus(200);
     }
 }
